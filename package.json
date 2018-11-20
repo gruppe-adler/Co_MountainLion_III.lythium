@@ -1,0 +1,10 @@
+{
+  "name": "CO_MountainLion_II.lythium",
+  "version": "0.0.1",
+  "dependencies": {
+    "grad-factions": "^2.2.0",
+    "grad-loadout": "^4.7.2",
+    "grad-civs": "github:gruppe-adler/grad-civs#master",
+    "shk_pos": "github:gruppe-adler/shk_pos#master"
+  }
+}

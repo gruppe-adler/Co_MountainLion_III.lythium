@@ -1,0 +1,339 @@
+__EXEC (MISSION_ROOT = __FILE__ select [0, count __FILE__ - 15])
+
+author = "Nomisum for Gruppe Adler";  //appears as author in overview and loading screen
+
+enableDebugConsole = 1;
+
+respawnDelay = 240;
+respawn = 3;
+respawnTemplates[] = { "Counter" };
+respawnOnStart = -1;//Dont respawn on start.
+respawnDialog = 0;
+respawnButton = 0;
+
+loadScreen = "pic\loading.jpg";
+OnLoadName    = "CO MOUNTAIN LION III";
+OnLoadMission = "US Special Forces securing a supply road.";
+
+class Header
+{
+	gameType = Seize;
+	minPlayers = 15;
+	maxPlayers = 39;
+};
+
+class CfgNotifications
+{
+
+    class LoadoutChanged
+    {
+        title = "LOADOUT CHANGED";
+        iconPicture = "\A3\ui_f\data\map\mapcontrol\taskIconDone_ca.paa";
+        description = "%1";
+        priority = 7;
+        color[]={0.69999999,1,0.30000001,1};
+        sound="taskSucceeded";
+    };
+
+	// Examples
+	class IntelFound
+	{
+		title = "INTEL FOUND";
+		iconPicture = "\A3\ui_f\data\IGUI\Cfg\simpleTasks\types\search_ca.paa";
+		description = "%1";
+		priority = 7;
+	};
+
+	class SpectatorAscending
+    {
+      title = "New Spectator!"; // Title displayed as text on black background. Filled by arguments.
+      iconPicture = "\A3\ui_f\data\igui\cfg\radar\danger_ca.paa"; // Small icon displayed in left part. Colored by "color", filled by arguments.
+      iconText = ""; // Short text displayed over the icon. Colored by "color", filled by arguments.
+      description = "%1 chose to spectate."; // Brief description displayed as structured text. Colored by "color", filled by arguments.
+      color[] = {1,1,1,1}; // Icon and text color
+      duration = 5; // How many seconds will the notification be displayed
+      priority = 0; // Priority; higher number = more important; tasks in queue are selected by priority
+      difficulty[] = {}; // Required difficulty settings. All listed difficulties has to be enabled
+    };
+
+    class AllSpectators
+    {
+      title = "All Spectators"; // Title displayed as text on black background. Filled by arguments.
+      iconPicture = "\A3\UI_F_MP_Mark\Data\Tasks\Types\meet_ca.paa"; // Small icon displayed in left part. Colored by "color", filled by arguments.
+      iconText = ""; // Short text displayed over the icon. Colored by "color", filled by arguments.
+      description = "%1 chose to spectate."; // Brief description displayed as structured text. Colored by "color", filled by arguments.
+      color[] = {1,1,1,1}; // Icon and text color
+      duration = 5; // How many seconds will the notification be displayed
+      priority = 0; // Priority; higher number = more important; tasks in queue are selected by priority
+      difficulty[] = {}; // Required difficulty settings. All listed difficulties has to be enabled
+    };
+
+    class Default
+    {
+      title = "Info"; // Title displayed as text on black background. Filled by arguments.
+      iconPicture = ""; // Small icon displayed in left part. Colored by "color", filled by arguments.
+      iconText = ""; // Short text displayed over the icon. Colored by "color", filled by arguments.
+      description = "%1"; // Brief description displayed as structured text. Colored by "color", filled by arguments.
+      color[] = {1,1,1,1}; // Icon and text color
+      duration = 5; // How many seconds will the notification be displayed
+      priority = 0; // Priority; higher number = more important; tasks in queue are selected by priority
+      difficulty[] = {}; // Required difficulty settings. All listed difficulties has to be enabled
+    };
+};
+
+class Extended_PreInit_EventHandlers {
+    class diwako_ragdoll {
+        init = "call compile preprocessFileLineNumbers 'diwako\ragdoll\cba_settings.sqf'";
+    };
+};
+
+#include "grad-gas\data\RscTitles.hpp"
+
+class cfgFunctions {
+	#include "node_modules\grad-loadout\cfgFunctions.hpp"
+
+  #include "node_modules\grad-civs\cfgFunctions.hpp"
+	#include "grad-ambient\cfgFunctions.hpp"
+	#include "grad-introCam\cfgFunctions.hpp"
+	#include "grad-missionControl\cfgFunctions.hpp"
+	#include "grad-civPartisans\cfgFunctions.hpp"
+	#include "grad-permaChoice\cfgFunctions.hpp"
+
+    #include "grad-gas\cfgFunctions.hpp"
+    #include "grad-customLoadout\cfgFunctions.hpp"
+
+    class diwako_ragdoll {
+        tag="diwako_ragdoll";
+        class functions {
+            file = "diwako\ragdoll";
+            class initRagdoll{};
+            class animChangedEH{};
+        };
+    };
+};
+
+class Loadouts {
+	#define LASERS       // equip weapon laser
+    #define NIGHTVISION // equip nightvision
+	
+    baseDelay = 1;      // base delay in seconds before applying loadouts on mission start
+    handleRadios = 1;   // radios are handled by grad-loadout
+    resetLoadout = 1;   // start with empty loadouts instead of modifying existing loadout
+
+  	class Faction {
+        #include "node_modules\grad-factions\loadouts.hpp"
+    };
+};
+
+class cfgSounds {
+    #include "grad-gas\cfgSounds.hpp"
+
+    class furnal
+    {
+        name = "furnal";
+        sound[] = {"audio\furnal.ogg", 1, 1};
+        titles[] = {1, ""};
+    };
+    class burned
+    {
+        name = "burned";
+        sound[] = {"audio\burned.ogg", 1, 1};
+        titles[] = {1, ""};
+    };
+    class tipat
+    {
+        name = "tipat";
+        sound[] = {"audio\tipat.ogg", 0.8, 1};
+        titles[] = {1, ""};
+    };
+
+    class bombix
+    {
+        name = "bombix";
+        sound[] = {"audio\bombix.ogg", db+20, 1};
+        titles[] = {1, ""};
+    };
+    class bombix_echo
+    {
+        name = "bombix_echo";
+        sound[] = {"audio\bombix_echo.ogg", db+5, 1};
+        titles[] = {1, ""};
+    };
+
+    class suicider1
+    {
+        name = "suicider1";
+        sound[] = {"audio\suicide_bomber1.ogg", db+5, 1};
+        titles[] = {1, ""};
+    };
+
+    class suicider2
+    {
+        name = "suicider2";
+        sound[] = {"audio\suicide_bomber2.ogg", db+5, 1};
+        titles[] = {1, ""};
+    };
+
+
+	
+
+	class muezzin
+	{
+	  name="muezzin";
+	  sound[]={"audio\muezzin.ogg", 6, 1};
+	  titles[]={};
+	};
+};
+
+class cfgMusic {
+	class muse_high
+	{
+	  name="muse_high";
+	  sound[]={"audio\muse_high.ogg", 1, 1};
+	  titles[]={};
+	};	
+
+	class openingbook
+	{
+	  name="openingbook";
+	  sound[]={"audio\openingbook.ogg", 1, 1};
+	  titles[]={};
+	};
+
+  class outro
+  {
+    name="outro";
+    sound[]={"audio\outro.ogg", 1, 1};
+    titles[]={};
+  };  
+};
+
+class CfgIdentities
+{
+	class AlShishani
+	{
+		name		= "Abu Omar al-Shishani";
+		nameSound	= "Abu Omar al-Shishani"; // Arma 3 only!
+		face		= "GreekHead_A3_11";
+		glasses		= "TRYK_Beard_BW2";
+		speaker		= "male03per";
+		pitch		= 0.9;
+	};
+};
+
+class CfgGradCivs {
+    autoInit = 1;
+    maxCivsOnFoot = 25;
+    maxCivsInVehicles = 10;
+    enableOnFoot = 1;
+    enableInVehicles = 1;
+    spawnDistancesOnFoot[] = {2000,4000};
+    spawnDistancesInVehicles[] = {2000,4000};
+    debugMode = 0;
+    exitOn = "missionNamespace getVariable ['STOP_CIVS', false]";
+    onSpawn = "[_this select 0] call GRAD_civPartisans_fnc_addKilledEH;";
+    onHeldUp = "";
+    backpackProbability = 0.1;
+
+    clothes[] = {
+        "LOP_U_TAK_Civ_Fatigue_01",
+        "LOP_U_TAK_Civ_Fatigue_02",
+        "LOP_U_TAK_Civ_Fatigue_03",
+        "LOP_U_TAK_Civ_Fatigue_04",
+        "LOP_U_TAK_Civ_Fatigue_05",
+        "LOP_U_TAK_Civ_Fatigue_06",
+        "LOP_U_TAK_Civ_Fatigue_07",
+        "LOP_U_TAK_Civ_Fatigue_08",
+        "LOP_U_TAK_Civ_Fatigue_09",
+        "LOP_U_TAK_Civ_Fatigue_10",
+        "LOP_U_TAK_Civ_Fatigue_11",
+        "LOP_U_TAK_Civ_Fatigue_12",
+        "LOP_U_TAK_Civ_Fatigue_13",
+        "LOP_U_TAK_Civ_Fatigue_14",
+        "LOP_U_TAK_Civ_Fatigue_15",
+        "LOP_U_TAK_Civ_Fatigue_16",
+        
+        "LOP_U_AM_Fatigue_01",
+        "LOP_U_AM_Fatigue_01_2",
+        "LOP_U_AM_Fatigue_01_3",
+        "LOP_U_AM_Fatigue_01_4",
+        "LOP_U_AM_Fatigue_01_5",
+        "LOP_U_AM_Fatigue_01_6",
+
+        "LOP_U_AM_Fatigue_02",
+        "LOP_U_AM_Fatigue_02_2",
+        "LOP_U_AM_Fatigue_02_3",
+        "LOP_U_AM_Fatigue_02_4",
+        "LOP_U_AM_Fatigue_02_5",
+        "LOP_U_AM_Fatigue_02_6",
+
+        "LOP_U_AM_Fatigue_03",
+        "LOP_U_AM_Fatigue_03_2",
+        "LOP_U_AM_Fatigue_03_3",
+        "LOP_U_AM_Fatigue_03_4",
+        "LOP_U_AM_Fatigue_03_5",
+        "LOP_U_AM_Fatigue_03_6",
+
+        "LOP_U_AM_Fatigue_04",
+        "LOP_U_AM_Fatigue_04_2",
+        "LOP_U_AM_Fatigue_04_3",
+        "LOP_U_AM_Fatigue_04_4",
+        "LOP_U_AM_Fatigue_04_5",
+        "LOP_U_AM_Fatigue_04_6"
+    };
+
+    headgear[] = {
+        "LOP_H_Pakol",
+        "LOP_H_Turban",
+        "LOP_H_Pakol",
+        "LOP_H_Pakol"
+    };
+
+    faces[] = {
+        "PersianHead_A3_01",
+        "PersianHead_A3_02",
+        "PersianHead_A3_03"
+    };
+
+    goggles[] = {
+        "TRYK_Beard_BK",
+        "TRYK_Beard_BK",
+        "TRYK_Beard_BK",
+        "TRYK_Beard_BW",
+        "TRYK_Beard_Gr"
+    };
+
+    backpacks[] = {
+        "rhs_sidor"
+    };
+
+
+    vehicles[] = {
+      "RDS_Gaz24_Civ_03",
+      "RDS_Gaz24_Civ_01",
+      "RDS_Gaz24_Civ_02",
+      "RDS_Ikarus_Civ_01",
+      "RDS_JAWA353_Civ_01",
+      "RDS_Old_bike_Civ_01",
+      "RDS_S1203_Civ_03",
+      "RDS_Zetor6945_Base",
+      "RDS_Lada_Civ_01",
+      "RDS_Lada_Civ_04",
+      "RDS_Lada_Civ_03",
+      "RDS_Lada_Civ_05",
+      "RDS_tt650_Civ_01",
+      "LOP_TAK_Civ_Landrover",
+      "LOP_TAK_Civ_UAZ",
+      "LOP_TAK_Civ_UAZ_Open",
+      "C_Truck_02_fuel_F",
+      "C_Truck_02_box_F",
+      "C_Truck_02_transport_F",
+      "C_Truck_02_covered_F",
+      "RHS_Ural_Civ_01",
+      "RHS_Ural_Open_Civ_01",
+      "RHS_Ural_Civ_03",
+      "RHS_Ural_Open_Civ_03",
+      "RHS_Ural_Civ_02",
+      "RHS_Ural_Open_Civ_02"
+    };
+};

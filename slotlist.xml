@@ -1,0 +1,42 @@
+<match uuid="1fea25bf-2bbf-47d5-8d56-ad75cb5724cd">
+  <company natosymbol="inf" callsign="OPZ" vehicletype="" min-slotted-player-count="25">
+    <platoon natosymbol="inf" callsign="Command" vehicletype="">
+      <squad natosymbol="inf" callsign="Hammer" vehicletype="">
+        <slot shortcode="SQL" description="Squad Leader"/>
+        <slot shortcode="SQM" description="Squad Medic"/>
+        <fireteam>
+          <slot shortcode="FTL" description="Fireteam Leader"/>
+          <slot shortcode="R" description="Rifleman"/>
+          <slot shortcode="R" description="Rifleman"/>
+          <slot shortcode="EXP" description="Explosive Specialist"/>
+        </fireteam>
+        <fireteam>
+          <slot shortcode="FTL" description="Fireteam Leader"/>
+          <slot shortcode="R" description="Rifleman"/>
+          <slot shortcode="R" description="Rifleman"/>
+          <slot shortcode="LAT" description="Light Anti Tank"/>
+        </fireteam>
+      </squad>
+      <squad natosymbol="inf" callsign="Forge" vehicletype="">
+        <slot shortcode="FTL" description="Fireteam Leader"/>
+        <slot shortcode="MG" description="Machine Gunner"/>
+        <slot shortcode="MGA" description="Machine Gunner Assistant"/>
+        <slot shortcode="CLS" description="Combat Life Saver"/>
+      </squad>
+      <squad natosymbol="air" callsign="Lifter" vehicletype="MH-6M">
+        <slot shortcode="PIL" description="Pilot"/>
+        <slot shortcode="PIL" description="Pilot"/>
+        <slot shortcode="PIL" description="Pilot"/>
+      </squad>
+      <squad natosymbol="inf" callsign="ZULU" vehicletype="">
+        <slot shortcode="PIL" description="Pilot"/>
+        <slot shortcode="GUN" description="Gunner"/>
+      </squad>
+      <slot shortcode="PTL" description="Platoon Leader"/>
+      <slot shortcode="PTA" description="Platoon Lead Assistant"/>
+      <slot shortcode="JTC" description="Joint Terminal Attack Controller"/>
+    </platoon>
+    <slot shortcode="Z" description="Zeus"/>
+    <slot shortcode="Z" description="Zeus"/>
+  </company>
+</match>
