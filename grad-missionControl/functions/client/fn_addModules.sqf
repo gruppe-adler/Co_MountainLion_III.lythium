@@ -194,6 +194,21 @@ if (
 
   }] call Ares_fnc_RegisterCustomModule;
 
+  ["ZEUS HELPERS", "Drop TFAR Ears",
+  {
+    // Get all the passed parameters
+    params [["_position", [0,0,0], [[]], 3], ["_objectUnderCursor", objNull, [objNull]]];
+
+    
+    if (isNull _objectUnderCursor) exitWith {
+        hint "Returning TFAR ears to Zeus";
+        player setVariable ["TF_fnc_position", nil];
+    };
+    
+    [_objectUnderCursor] call GRAD_missionControl_dropZeusEars;
+
+  }] call Ares_fnc_RegisterCustomModule;
+
   
 
 };

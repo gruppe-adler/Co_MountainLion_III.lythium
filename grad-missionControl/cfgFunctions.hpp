@@ -5,6 +5,7 @@ class grad_missionControl {
 
       class addModules;
       class createBloodEffect;
+      class dropZeusEars;
       class setMyFrequency;
       class setGroupFrequencies;
       class stopMusic;
