@@ -1,12 +1,13 @@
-if (isMultiplayer) then {
-	setDate [2015, 06, 06, 22.5, 0];
-};
+// setDate [2015, 06, 06, 5.5, 0];
+
 
 ["Initialize", [true]] call BIS_fnc_dynamicGroups;
 
+/*
 if (isMultiplayer) then {
 	[] spawn GRAD_introCam_fnc_init;
 };
+*/
 
 [["mrk_ied_1", "mrk_ied_2", "mrk_ied_3"], 5, true] call GRAD_ambient_fnc_ied;
 

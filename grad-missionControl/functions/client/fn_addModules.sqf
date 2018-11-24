@@ -159,24 +159,46 @@ if (
 
   }] call Ares_fnc_RegisterCustomModule;
 
-  ["ML FX", "Explosion IED LAB",
+  ["ML FX", "Make Suicide Bomber",
   {
     // Get all the passed parameters
     params [["_position", [0,0,0], [[]], 3], ["_objectUnderCursor", objNull, [objNull]]];
 
-    // [cursorObject, 10, false] call GRAD_gas_fnc_explosionServer;
-    [ML2_gasTank, 15, true] remoteExec ["GRAD_gas_fnc_explosionServer", 2];
+    if (isNull _objectUnderCursor) exitWith { hint "no unit selected"; };
+
+    [_objectUnderCursor, 300, 100] remoteExec ["GRAD_ambient_fnc_suicider", 2];
+
+  }] call Ares_fnc_RegisterCustomModule;
+
+
+  ["ML FX", "Weather change to stormy in 5 min",
+  {
+    // Get all the passed parameters
+    params [["_position", [0,0,0], [[]], 3], ["_objectUnderCursor", objNull, [objNull]]];
+
+    // time, overcast, rain, lightning, fog
+    [300, 1, 0, 1, 0.2] remoteExec ["GRAD_ambient_fnc_weatherChange", 2];
+
+  }] call Ares_fnc_RegisterCustomModule;
+
+
+  ["ML FX", "Weather change to blue sky in 5 min",
+  {
+    // Get all the passed parameters
+    params [["_position", [0,0,0], [[]], 3], ["_objectUnderCursor", objNull, [objNull]]];
+
+    // time, overcast, rain, lightning, fog
+    [300, 0, 0, 0, 0] remoteExec ["GRAD_ambient_fnc_weatherChange", 2];
 
   }] call Ares_fnc_RegisterCustomModule;
 
   
 
-  ["ML MISSION", "Force Respawn everyone here",
+  ["ML MISSION", "Force Respawn everyone",
   {
     // Get all the passed parameters
     params [["_position", [0,0,0], [[]], 3], ["_objectUnderCursor", objNull, [objNull]]];
 
-    missionNameSpace setVariable ["ATAKA_RespawnPosition", _position, true];
     [] remoteExec ["GRAD_permaChoice_fnc_forceRespawn", [0,-2] select isDedicated, true];
 
   }] call Ares_fnc_RegisterCustomModule;
@@ -205,7 +227,7 @@ if (
         player setVariable ["TF_fnc_position", nil];
     };
     
-    [_objectUnderCursor] call GRAD_missionControl_dropZeusEars;
+    [_objectUnderCursor] call GRAD_missionControl_fnc_dropZeusEars;
 
   }] call Ares_fnc_RegisterCustomModule;
 

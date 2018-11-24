@@ -4,7 +4,7 @@ author = "Nomisum for Gruppe Adler";  //appears as author in overview and loadin
 
 enableDebugConsole = 1;
 
-respawnDelay = 240;
+respawnDelay = 60;
 respawn = 3;
 respawnTemplates[] = { "Counter" };
 respawnOnStart = -1;//Dont respawn on start.
@@ -87,10 +87,17 @@ class Extended_PreInit_EventHandlers {
     };
 };
 
-#include "grad-gas\data\RscTitles.hpp"
+// #include "grad-gas\data\RscTitles.hpp"
+#include "node_modules\grad-fortifications\grad_fortifications.hpp"
+
+class RscTitles {
+  #include "node_modules\grad-fortifications\dialog\hint\title.hpp"
+};
+
 
 class cfgFunctions {
 	#include "node_modules\grad-loadout\cfgFunctions.hpp"
+  #include "node_modules\grad-fortifications\cfgFunctions.hpp"
 
   #include "node_modules\grad-civs\cfgFunctions.hpp"
 	#include "grad-ambient\cfgFunctions.hpp"
@@ -99,7 +106,7 @@ class cfgFunctions {
 	#include "grad-civPartisans\cfgFunctions.hpp"
 	#include "grad-permaChoice\cfgFunctions.hpp"
 
-    #include "grad-gas\cfgFunctions.hpp"
+   // #include "grad-gas\cfgFunctions.hpp"
     #include "grad-customLoadout\cfgFunctions.hpp"
 
     class diwako_ragdoll {
@@ -208,6 +215,71 @@ class cfgMusic {
   };  
 };
 
+class CfgGradFortifications {
+    canDemolishDefault = 1;
+    demolitionTimeFactor = 1;
+    playerInventorySize = 1;
+    vehicleInventorySizeFactor = 2;
+
+    class Fortifications {
+        class Land_BagFence_Long_F {
+            boundingBoxSize = 1;
+            canFloat = 1;
+            canCollide = 1;
+            size = 1;
+            buildTime = 10;
+            demolitionTime = 20;
+        };
+
+        class Land_HBarrier_5_F {
+            boundingBoxSize = 0.8;
+            surfaceNormal = 0;
+            canDemolish = 1;
+            size = 1;
+            buildTime = 15;
+            demolitionTime = 60;
+        };
+
+        class RHS_M2StaticMG_USMC_D {
+            boundingBoxSize = 0.8;
+            surfaceNormal = 0;
+            canDemolish = 1;
+            size = 1;
+            buildTime = 5;
+            demolitionTime = 10;
+        };
+
+        class Flag_US_F {
+            boundingBoxSize = 0.8;
+            surfaceNormal = 0;
+            canDemolish = 1;
+            size = 1;
+            buildTime = 5;
+            demolitionTime = 5;
+        };
+
+        class Land_Cargo_Patrol_V3_F {
+            boundingBoxSize = 0.8;
+            surfaceNormal = 0;
+            canDemolish = 1;
+            size = 1;
+            buildTime = 30;
+            demolitionTime = 60;
+        };
+        
+
+        
+    };
+
+    class Vehicles {
+        class rhsusf_M1078A1P2_B_D_CP_fmtv_usarmy {
+            isStorage = 1;
+            vehicleInventorySize = 500;
+        };
+    };
+};
+
+
 class CfgIdentities
 {
 	class AlShishani
@@ -231,7 +303,7 @@ class CfgGradCivs {
     spawnDistancesInVehicles[] = {2000,4000};
     debugMode = 0;
     exitOn = "missionNamespace getVariable ['STOP_CIVS', false]";
-    onSpawn = "[_this select 0] call GRAD_civPartisans_fnc_addKilledEH;";
+    onSpawn = "[_this select 0, _this select 1] call GRAD_civPartisans_fnc_addKilledEH;";
     onHeldUp = "";
     backpackProbability = 0.1;
 

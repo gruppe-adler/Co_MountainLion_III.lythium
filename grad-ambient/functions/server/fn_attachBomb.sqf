@@ -1,8 +1,8 @@
 params ["_vehicle"];
 
-_vehicle addEventHandler ["Killed", {
-    params ["_unit", "_source", "_damage", "_instigator"];
+_vehicle addMPEventHandler ["mpkilled", {
+    params ["_unit", "_killer", "_instigator", "_useeffects"];
 
-    private _secondary = "ammo_Missile_Cruise_01" createVehicle position _unit;
+    private _secondary = "Bo_GBU12_LGB" createVehicle position _unit;
     _secondary setDamage 1;
 }];

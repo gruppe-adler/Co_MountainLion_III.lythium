@@ -13,5 +13,6 @@ class grad_ambient {
       	class fapper;
         class ied;
         class suicider;
+        class weatherChange;
   };
 };

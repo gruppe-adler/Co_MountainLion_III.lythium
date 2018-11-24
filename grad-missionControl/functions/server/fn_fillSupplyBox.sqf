@@ -39,3 +39,6 @@ _box addWeaponCargoGlobal ["rhs_weap_M136", 5];
 // entrenching
 _box addItemCargoGlobal ["ACE_entrenchingTool", 10];
 _box addItemCargoGlobal ["ACE_TacticalLadder_Pack", 3];
+
+
+_box addWeaponCargoGlobal ["ACE_VMH3", 3];

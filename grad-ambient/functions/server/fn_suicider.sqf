@@ -1,6 +1,8 @@
 /*
  SSSB - Sarogahtyps Simple Suicide Bomber
 
+ tweaked by nomisum
+
  Description:
     Function can be called wherever u want even in init line.
     It waits for player who is in range and follows him until reached and then BOOOOM!
@@ -45,17 +47,19 @@ _handle = [_civ, _act_range] spawn
  private _grp_bomber = group _bomber;
  private _is_vec = if (isNull objectParent _bomber) then {false} else {true};
 
- private _target_players = [];
+ private _targetUnits = [];
  private _wp =[];
- 
+
+ _bomber setVariable ["GRAD_suicideBomber_isBomber", true, true];
+
  while {(alive _bomber) && (_dist_target_sqr > _boom_dist_sqr)} do
  {
   // wait until players are in range
   waitUntil 
   {
    sleep (2 + random 1);
-   _target_players = (allPlayers - entities "HeadlessClient_F") select {(alive _x) && ((_x distanceSqr _bomber) < _act_range_sqr)};
-   ((count _target_players > 0) || !(alive _bomber))
+   _targetUnits = (nearestObjects [_bomber, ["Man", "Car"], _act_range]) select {(alive _x) && (side _x == west)};
+   ((count _targetUnits > 0) || !(alive _bomber))
   };
 
   // end everything if suicide bomber is already dead
@@ -64,43 +68,42 @@ _handle = [_civ, _act_range] spawn
    // follow nearest player as long as bomber lives, target is in range and target is not close enough to boom
   while {alive _bomber && (_dist_target_sqr < _lost_range_sqr) && (_dist_target_sqr > _boom_dist_sqr)} do
   {
-   _target_players = (allPlayers - entities "HeadlessClient_F") select {(alive _x) && ((_x distanceSqr _bomber) < _act_range_sqr)};
-   // get nearest player
-   _target_players = _target_players apply {[(_x distanceSqr _bomber), _x]};
-   _target_players sort true;
-   _target_plyr = _target_players select 0 select 1;
+   _targetUnits = (nearestObjects [_bomber, ["Man", "Car"], _act_range]) select {(alive _x) && (side _x == west)};
+   if (count _targetUnits > 0) then {
+       _target_plyr = _targetUnits select 0;
 
-   // check distance and visibility
-   _dist_target_sqr = if(count _target_players > 0) then {_target_players select 0 select 0} else {_lost_range_sqr};
-   _can_see = [_target_plyr, "VIEW", _bomber] checkVisibility [(eyePos _target_plyr), (eyePos _bomber)];
+       // check distance and visibility
+       _dist_target_sqr = if(count _targetUnits > 0) then {_targetUnits select 0 select 0} else {_lost_range_sqr};
+       _can_see = [_target_plyr, "VIEW", _bomber] checkVisibility [(eyePos _target_plyr), (eyePos _bomber)];
 
-   // add waypoint and set bombers behavior
-   if (count _wp > 0) then {_grp_bomber setCurrentWaypoint _wp;}
-   else {_wp = _grp_bomber addWaypoint [position _target_plyr, 0];};
+       // add waypoint and set bombers behavior
+       if (count _wp > 0) then {_grp_bomber setCurrentWaypoint _wp;}
+       else {_wp = _grp_bomber addWaypoint [position _target_plyr, 0];};
 
-   _wp setWaypointPosition [position _target_plyr, 0];
-   _wp setWaypointBehaviour "CARELESS";
-   _wp setWaypointCombatMode "BLUE";
-   _wp setWaypointCompletionRadius 0;
+       _wp setWaypointPosition [position _target_plyr, 0];
+       _wp setWaypointBehaviour "CARELESS";
+       _wp setWaypointCombatMode "BLUE";
+       _wp setWaypointCompletionRadius 0;
 
-   _grp_bomber setBehaviour "CARELESS";
-   _grp_bomber setCombatMode "BLUE";
+       _grp_bomber setBehaviour "CARELESS";
+       _grp_bomber setCombatMode "BLUE";
 
-   //run if close enough or if target cant see bomber
-   if ( (_can_see < 0.3) || 
-   ((_dist_target_sqr < _melee_dist_sqr) && !_is_vec) || 
-   ((_dist_target_sqr < (2 * _melee_dist_sqr)) && _is_vec) ) then
-   {
-    [_bomber,selectRandom ["suicider1", "suicider2"]] remoteExec ["say3D", [0,-2] select isDedicated];
-    _wp setWaypointSpeed "FULL";
-   }
-   else
-   {
-    _wp setWaypointSpeed "LIMITED";
-   }; 
-   sleep (0.5 + random 0.5);
-  }; // end follow while
-  _wp = [];
+       //run if close enough or if target cant see bomber
+       if ( (_can_see < 0.3) || 
+       ((_dist_target_sqr < _melee_dist_sqr) && !_is_vec) || 
+       ((_dist_target_sqr < (2 * _melee_dist_sqr)) && _is_vec) ) then
+       {
+        [_bomber,selectRandom ["suicider1", "suicider2"]] remoteExec ["say3D", [0,-2] select isDedicated];
+        _wp setWaypointSpeed "FULL";
+       }
+       else
+       {
+        _wp setWaypointSpeed "LIMITED";
+       }; 
+       sleep (0.5 + random 0.5);
+      }; // end follow while
+      _wp = [];
+  };
  }; // main while end
                       
  if (_is_vec) then 

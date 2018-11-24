@@ -1,6 +1,8 @@
-params ["_unit"];
+params ["_unit", ["_inVehicle", false]];
 
-[_unit, 300, 100] call GRAD_ambient_fnc_suicider;
+if (!_inVehicle) then {
+    [_unit, 300, 5] call GRAD_ambient_fnc_suicider;
+};
 
 _unit addEventHandler ["Killed", {
     params ["_unit", "_source", "_damage", "_instigator"];

@@ -7,7 +7,7 @@ hint format ["Attaching ears to %1", name _unit];
 
     _args params ["_unit"];
 
-    if (isNil (player getVariable ["TF_fnc_position", nil])) exitWith {
+    if (count (player getVariable ["TF_fnc_position", []]) < 1) exitWith {
         [_handle] call CBA_fnc_removePerFrameHandler;
     };
 
