@@ -1,5 +1,5 @@
 // dont display for JIP
-// if (didJIP) exitWith {};
+if (didJIP) exitWith {};
 waitUntil {!isNull player};
 waitUntil {time > 0};
 player setVariable ["tf_voiceVolume", 0, true];

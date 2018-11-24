@@ -127,7 +127,7 @@ _handle = [_civ, _act_range] spawn
  }; // main while end
 
  private _position = position _bomber;
-  _boom = createVehicle ["Bo_GBU12_LGB", _position, [], 0, "CAN_COLLIDE"];
+  _boom = createVehicle ["Bomb_04_F", _position, [], 0, "CAN_COLLIDE"];
   [_position] remoteExec ["GRAD_missionControl_fnc_createBloodEffect", [0,-2] select isDedicated];
  deleteVehicle _bomber;
 }; //spawn end
