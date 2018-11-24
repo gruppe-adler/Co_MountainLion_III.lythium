@@ -120,8 +120,8 @@ class cfgFunctions {
 };
 
 class Loadouts {
-	#define LASERS       // equip weapon laser
-    #define NIGHTVISION // equip nightvision
+	// #define LASERS       // equip weapon laser
+    // #define NIGHTVISION // equip nightvision
 	
     baseDelay = 1;      // base delay in seconds before applying loadouts on mission start
     handleRadios = 1;   // radios are handled by grad-loadout

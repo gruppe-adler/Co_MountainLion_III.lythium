@@ -4,6 +4,7 @@ class grad_ambient {
 		file = grad-ambient\functions\client;
 		
       	class pcLight;
+        class createFire;
   };
 
 	class server {

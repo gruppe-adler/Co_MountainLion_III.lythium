@@ -32,8 +32,8 @@ if ((random 100 > _chance) || !(alive _civ)) exitWith {-1};
 _handle = [_civ, _act_range] spawn
 { 
  params ["_bomber", "_act_range"];
- private _melee_dist = 15;
- private _boom_dist = 5;
+ private _melee_dist = 10;
+ private _boom_dist = 4;
 
  private _dist_target = _act_range;
  private _lost_range = round (_act_range * 1.2); 
@@ -73,7 +73,7 @@ _handle = [_civ, _act_range] spawn
        _target_plyr = _targetUnits select 0;
 
        // check distance and visibility
-       _dist_target_sqr = if(count _targetUnits > 0) then {_targetUnits select 0 select 0} else {_lost_range_sqr};
+       _dist_target_sqr = if(count _targetUnits > 0) then {_target_plyr distance _bomber} else {_lost_range_sqr};
        _can_see = [_target_plyr, "VIEW", _bomber] checkVisibility [(eyePos _target_plyr), (eyePos _bomber)];
 
        // add waypoint and set bombers behavior
@@ -87,33 +87,48 @@ _handle = [_civ, _act_range] spawn
 
        _grp_bomber setBehaviour "CARELESS";
        _grp_bomber setCombatMode "BLUE";
+       _grp_bomber setVariable ["grad_civs_isGradCiv", false, true];
+       _grp_bomber setVariable ["GRAD_fleeing", true, true];
+
+       _bomber setskill ["courage",1];
+       _bomber setCombatMode "RED";
+       _bomber ForceSpeed 10;
+       _bomber allowFleeing 0;
+       _bomber disableAI "Target";
+       _bomber disableAI "Autotarget";
+       _bomber SetUnitPos "UP";
+       _bomber disableAI "AUTOCOMBAT";
+       _bomber disableAI "COVER";
+       _bomber disableAI "SUPPRESSION";
+       _bomber disableAI "AUTOCOMBAT";
+       _bomber enableFatigue false;
+
 
        //run if close enough or if target cant see bomber
        if ( (_can_see < 0.3) || 
        ((_dist_target_sqr < _melee_dist_sqr) && !_is_vec) || 
        ((_dist_target_sqr < (2 * _melee_dist_sqr)) && _is_vec) ) then
        {
-        [_bomber,selectRandom ["suicider1", "suicider2"]] remoteExec ["say3D", [0,-2] select isDedicated];
+        if (random 2 > 1) then {
+            [_bomber,[selectRandom ["suicider1", "suicider2"],120]] remoteExec ["say3D", [0,-2] select isDedicated];
+        };
         _wp setWaypointSpeed "FULL";
+        _wp setWaypointPosition [position _target_plyr, 0];
+        _grp_bomber setCurrentWaypoint _wp;
        }
        else
        {
         _wp setWaypointSpeed "LIMITED";
        }; 
-       sleep (0.5 + random 0.5);
+       sleep (2 + random 0.5);
       }; // end follow while
       _wp = [];
   };
  }; // main while end
-                      
- if (_is_vec) then 
- {
-  _boom = createVehicle ["Bo_GBU12_LGB", getPos _bomber, [], 0, "CAN_COLLIDE"];
- }
- else 
- {
-  _boom = createVehicle ["R_60mm_HE", getPos _bomber, [], 0, "CAN_COLLIDE"];
- };
+
+ private _position = position _bomber;
+  _boom = createVehicle ["Bo_GBU12_LGB", _position, [], 0, "CAN_COLLIDE"];
+  [_position] remoteExec ["GRAD_missionControl_fnc_createBloodEffect", [0,-2] select isDedicated];
  deleteVehicle _bomber;
 }; //spawn end
 _handle

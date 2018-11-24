@@ -21,3 +21,10 @@ _unit addEventHandler ["Killed", {
 
 
 }];
+
+
+// race condition with grad loadout, i know
+[{
+    params ["_unit"];
+    removeAllWeapons _unit;
+}, [_unit], 3] call CBA_fnc_waitAndExecute;
