@@ -7,10 +7,10 @@ hint format ["Attaching ears to %1", name _unit];
 
     _args params ["_unit"];
 
-    if (count (player getVariable ["TF_fnc_position", []]) < 1) exitWith {
+    if ((player getVariable ["TF_fnc_position", objNull]) isEqualTo objNull) exitWith {
         [_handle] call CBA_fnc_removePerFrameHandler;
     };
-
-    player setVariable ["TF_fnc_position", position _unit];
-
+    grad_zeusEearUnit = _unit;
 }, 0.1, [_unit]] call CBA_fnc_addPerFrameHandler;
+
+ player setVariable ["TF_fnc_position", {[grad_zeusEearUnit modelToWorldVisualWorld (grad_zeusEearUnit selectionPosition "pilot"), getCameraViewDirection grad_zeusEearUnit]}];
